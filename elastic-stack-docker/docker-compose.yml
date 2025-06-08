@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.15.5
+    container_name: elasticsearch-weatherapp
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
+    ports:
+      - "9200:9200"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+    healthcheck:
+      test: ["CMD-SHELL", "curl -s http://localhost:9200/_cluster/health?wait_for_status=yellow&timeout=5s || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.15.5
+    container_name: kibana-weatherapp
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+      - xpack.security.enabled=false
+    ports:
+      - "5601:5601"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
+  apm-server:
+    image: docker.elastic.co/apm/apm-server:8.15.5
+    container_name: apm-server-weatherapp
+    environment:
+      - output.elasticsearch.hosts=["http://elasticsearch:9200"]
+      # - logging.level=debug # Optional for APM server logs
+      # - logging.to_files=false
+    ports:
+      - "8200:8200"
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+    command: # Define command as a list of arguments
+      - apm-server
+      - -e # The -e flag for apm-server itself (log to stderr and disable syslog/file output)
+      - -E
+      - apm-server.rum.enabled=true
+      - -E
+      - apm-server.auth.anonymous.enabled=true
+      - -E
+      - apm-server.rum.allow_origins=["*"]
+      # - -E # If you wanted to add debug logging via command
+      # - logging.level=debug
+
+volumes:
+  elasticsearch_data:
+    driver: local

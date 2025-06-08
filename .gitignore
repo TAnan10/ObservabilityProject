@@ -1,0 +1,43 @@
+# General
+.DS_Store
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Node / React (ReactWeatherMonitor)
+ReactWeatherMonitor/node_modules/
+ReactWeatherMonitor/.pnp
+ReactWeatherMonitor/.pnp.js
+ReactWeatherMonitor/coverage/
+ReactWeatherMonitor/build/
+ReactWeatherMonitor/.DS_Store
+ReactWeatherMonitor/.env.local
+ReactWeatherMonitor/.env.development.local
+ReactWeatherMonitor/.env.test.local
+ReactWeatherMonitor/.env.production.local
+
+# .NET / C# (TrafficApiDotNet)
+TrafficApiDotNet/bin/
+TrafficApiDotNet/obj/
+TrafficApiDotNet/.vs/
+TrafficApiDotNet/.vscode/ # If you have VS Code settings specific to this sub-project only
+TrafficApiDotNet/UserSecrets/ # For user secrets, good practice
+TrafficApiDotNet/*.user
+TrafficApiDotNet/*.dbmdl
+TrafficApiDotNet/App_Data/*.mdf
+TrafficApiDotNet/App_Data/*.ldf
+TrafficApiDotNet/App_Data/*.sdf
+
+# Docker (elastic-stack-docker)
+# Usually, Docker named volumes are outside the Git repo, so less to ignore here.
+# If you had local files mapped into Docker that were temporary, you'd add them.
+# For example, if elasticsearch_data was mapped to a subfolder:
+# elastic-stack-docker/elasticsearch_data_on_host/
+
+# Visual Studio Code
+.vscode/ # General VS Code settings at the root of Observability
