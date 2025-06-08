@@ -1,6 +1,9 @@
 // Program.cs
+using Elastic.Apm.NetCoreAll; // <-- ADD THIS LINE
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddAllElasticApm();
 
 // Add services to the container.
 builder.Services.AddControllers(); // Ensures services for controllers are added
